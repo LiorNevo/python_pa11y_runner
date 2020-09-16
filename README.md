@@ -4,19 +4,19 @@ Pa11y Runner
 
 Currently CSV reports are generated for WCAG2A and WCAG2AA standards using both axe and htmlcs runners.
 
-##Features
+## Features
 - Written in Python
 - Small, simple options list
 - Short dependency list
 
-##Requirements
+## Requirements
 - Python 3.7.1+
 - npm 6.14.8
 
-##Installation
+## Installation
 `pip install -r requirements.txt`
 
-##Usage
+## Usage
     pa11y_runner.py <directory-name> [options]
         options:
         -h, --help                              Show this screen
