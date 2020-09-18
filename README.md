@@ -1,6 +1,7 @@
 Pa11y Runner
 ===
-`pa11y_runner` is a simple wrapper for running pa11y scans against local copies of websites.
+`pa11y_runner` is a simple wrapper for the [pa11y](https://pa11y.org/) CLI tool for runnign scans against local copies of websites.
+
 
 Currently CSV reports are generated for WCAG2A and WCAG2AA standards using both axe and htmlcs runners.
 
@@ -14,6 +15,16 @@ Currently CSV reports are generated for WCAG2A and WCAG2AA standards using both 
 - npm 6.14.8
 
 ## Installation
+1. clone the repo using:  
+`git clone git@github.com:ryanbuhl-lab49/python_pa11y_runner.git`
+2. change into the `python_pa11y_runner` directory  
+`cd python_pa11y_runner`  
+3. create a virtual environment:  
+`python -m venv .pa11y-runner-venv`
+4. activate the virtual environemnt
+`. .pa11y-runner-venv/bin/activate` on *nix platforms or  
+`.pa11y-runner-venv\Scripts\activate` on Windows platforms
+5. install the dependencies with `pip` using:
 `pip install -r requirements.txt`
 
 ## Usage
@@ -31,5 +42,9 @@ If no value is given, the reports the reports will be saved into a `reports` dir
 ## TODO
 These items are very high level.
 - [ ] Add unit tests.
-- [ ] add option for running additional standards scans
-- [ ] add option for specifying report formats
+- [ ] Come up with a better name for the application
+- [ ] create setup.py script
+- [ ] add more support for pa11y command parameters for running additional standards scans
+- [ ] convert to use [click](https://click.palletsprojects.com/en/7.x/) rather than [docopt](http://docopt.org/)
+- [ ] see if the runner can navigate sites directly and save the source files for scanning.  (May need Selenium or similar for IE support at which time this won't be cross platform anymore)
+- [ ] restructure project file structure
