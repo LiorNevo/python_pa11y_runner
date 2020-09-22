@@ -1,6 +1,6 @@
 Pa11y Runner
 ===
-`pa11y_runner` is a simple wrapper for the [pa11y](https://pa11y.org/) CLI tool for running scans against html source files from websites dowloaded using the browser's "Save as" menu.
+`pa11y_runner` is a simple wrapper for the [pa11y](https://pa11y.org/) CLI tool for running scans against HTML source files from websites downloaded using the browser's "Save as" menu.
 
 
 Currently CSV reports are generated for WCAG2A and WCAG2AA standards using both [axe](https://www.deque.com/axe/) and [htmlcs](https://squizlabs.github.io/HTML_CodeSniffer/) runners.
