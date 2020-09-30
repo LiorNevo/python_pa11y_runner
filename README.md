@@ -38,7 +38,7 @@ Currently CSV reports are generated for WCAG2A and WCAG2AA standards using both 
 `. .pa11y-runner-venv/bin/activate` on *nix platforms or  
 `.pa11y-runner-venv\Scripts\activate` on Windows platforms
 5. install the script and dependencies with `pip` using:
-`pip install --editable .`
+`pip install .`
 
 ## Usage
     pa11y_runner.py [options] <directory-name> 
