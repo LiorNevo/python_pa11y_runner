@@ -14,7 +14,7 @@ Currently CSV reports are generated for WCAG2A and WCAG2AA standards using both 
 - Python 3.7.1+
 - npm 6.14.8
 
-## Installation
+## Installation for development
 1. clone the repo using:  
 `git clone git@github.com:ryanbuhl-lab49/python_pa11y_runner.git`
 2. change into the `python_pa11y_runner` directory  
@@ -25,10 +25,23 @@ Currently CSV reports are generated for WCAG2A and WCAG2AA standards using both 
 `. .pa11y-runner-venv/bin/activate` on *nix platforms or  
 `.pa11y-runner-venv\Scripts\activate` on Windows platforms
 5. install the dependencies with `pip` using:
-`pip install -r requirements.txt`
+`pip install --editable .`
+
+## Installation for use
+1. clone the repo using:  
+`git clone git@github.com:ryanbuhl-lab49/python_pa11y_runner.git`
+2. change into the `python_pa11y_runner` directory  
+`cd python_pa11y_runner`  
+3. create a virtual environment (Optional but recommended)  
+`python -m venv .pa11y-runner-venv`
+4. activate the virtual environemnt (only if a virtual environment was created)
+`. .pa11y-runner-venv/bin/activate` on *nix platforms or  
+`.pa11y-runner-venv\Scripts\activate` on Windows platforms
+5. install the script and dependencies with `pip` using:
+`pip install --editable .`
 
 ## Usage
-    pa11y_runner.py <directory-name> [options]
+    pa11y_runner.py [options] <directory-name> 
         options:
         -h, --help                              Show this screen
         -o, --output-directory <output-dir>     Location where to save the generated reports
@@ -43,7 +56,7 @@ If no value is given, the reports the reports will be saved into a `reports` dir
 These items are very high level.
 - [ ] Add unit tests.
 - [ ] Come up with a better name for the application
-- [ ] create setup.py script
+- [X] create setup.py script
 - [ ] add more support for pa11y command parameters for running additional standards scans
 - [ ] convert to use [click](https://click.palletsprojects.com/en/7.x/) rather than [docopt](http://docopt.org/)
 - [ ] see if the runner can navigate sites directly and save the source files for scanning.  (May need Selenium or similar for IE support at which time this won't be cross platform anymore)
