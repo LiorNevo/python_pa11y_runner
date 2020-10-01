@@ -48,27 +48,20 @@ def run_pa11y(file: str, output_dir: str, standard: str, runner: str) -> Union[s
             raise
 
     report_path = Path(output_dir, report_name)
-    report_file = open(report_path, 'w')
     error_filename = f'{file}_errors.txt'
-    err_file = open(error_filename, 'a')
+    with open(report_path, 'w') as report_file, open(error_filename, 'a') as err_file:
+        res = subprocess.run(pa11y_cmd, stdout=report_file, stderr=err_file)
 
-    res = subprocess.run(pa11y_cmd, stdout=report_file, stderr=err_file)
-    report_file.flush()
-    err_file.flush()
-
-    if res.returncode is not 2:
-        report_file.write(f'{standard} scan not successfully run due to compatibility errors')
-        print_red('ERROR', True)
-        return f'Errors while processing {file}.\n  ' \
-               f'{error_filename} may have more information.'
-    else:
-        # delete error file if there were no errors for the file
-        print_green('No Error with page scan', True)
-        if os.path.exists(error_filename) and os.path.getsize(error_filename) == 0:
-            os.remove(error_filename)
-
-    report_file.close()
-    err_file.close()
+        if res.returncode is not 2:
+            report_file.write(f'{standard} scan not successfully run due to compatibility errors')
+            print_red('ERROR', True)
+            return f'Errors while processing {file}.\n  ' \
+                   f'{error_filename} may have more information.'
+        else:
+            # delete error file if there were no errors for the file
+            print_green('No Error with page scan', True)
+    if os.path.exists(error_filename) and os.path.getsize(error_filename) == 0:
+        os.remove(error_filename)
 
 
 @click.command()
