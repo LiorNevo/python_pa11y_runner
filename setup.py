@@ -6,8 +6,8 @@ setup(
     version='0.1',
     py_modules=['pa11y_runner'],
     install_requires=[
-        'Click',
-        'termcolor',
+        'click==7.1.2',
+        'termcolor==1.1.0',
     ],
     entry_points='''
         [console_scripts]
