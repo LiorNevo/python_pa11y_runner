@@ -1,21 +1,12 @@
-"""
-usage: pa11y_runner.py <directory-name> [options]
-
-    options:
-    -h, --help                              Show this screen
-    -o, --output-directory <output-dir>     Location where to save the generated reports
-    -f, --file <file-name>                  Name of specific file to scan
-"""
 import errno
-import subprocess
-from typing import Union, List, Dict
-
-from termcolor import cprint
-
-from docopt import docopt
-from pathlib import Path
-import os
 import glob
+import os
+import subprocess
+from pathlib import Path
+from typing import Union, List
+
+import click
+from termcolor import cprint
 
 WARNINGS_FLAG = '--include-warnings'
 NOTICES_FLAG = '--include-notices'
@@ -57,37 +48,38 @@ def run_pa11y(file: str, output_dir: str, standard: str, runner: str) -> Union[s
             raise
 
     report_path = Path(output_dir, report_name)
-    report_file = open(report_path, 'w')
     error_filename = f'{file}_errors.txt'
-    err_file = open(error_filename, 'a')
+    with open(report_path, 'w') as report_file, open(error_filename, 'a') as err_file:
+        res = subprocess.run(pa11y_cmd, stdout=report_file, stderr=err_file)
 
-    res = subprocess.run(pa11y_cmd, stdout=report_file, stderr=err_file)
-    report_file.flush()
-    err_file.flush()
-
-    if res.returncode is not 2:
-        report_file.write(f'{standard} scan not successfully run due to compatibility errors')
-        print_red('ERROR', True)
-        return f'Errors while processing {file}.\n  ' \
-               f'{error_filename} may have more information.'
-    else:
-        # delete error file if there were no errors for the file
-        print_green('No Error with page scan', True)
-        if os.path.exists(error_filename) and os.path.getsize(error_filename) == 0:
-            os.remove(error_filename)
-
-    report_file.close()
-    err_file.close()
+        if res.returncode is not 2:
+            report_file.write(f'{standard} scan not successfully run due to compatibility errors')
+            print_red('ERROR', True)
+            return f'Errors while processing {file}.\n  ' \
+                   f'{error_filename} may have more information.'
+        else:
+            # delete error file if there were no errors for the file
+            print_green('No Error with page scan', True)
+    if os.path.exists(error_filename) and os.path.getsize(error_filename) == 0:
+        os.remove(error_filename)
 
 
-def run(arguments: Dict[str, str]) -> None:
-    directory_name = arguments['<directory-name>']
-    output_dir = arguments.get('--output-directory', 'reports')
-    file_name = arguments.get('--file')
+@click.command()
+@click.option('--output-directory',
+              help='The path where to place the accessibility scan reports relative to the '
+                   'current directory.  If no path is specified the report are placed in a '
+                   '"reports" sub-directory in the current directory.')
+@click.option('--file-name', help='Name of specific file to scan')
+@click.argument('directory-name')
+def run(output_directory: str, file_name: str, directory_name: str) -> None:
+    """ This script will execute a accesibility scan of WCAG2A and WCAG2AA accessibility standards using axe and htmlcs runners with pa11y.
 
-    if output_dir is None:
+    DIRECTORY_NAME is the path to the html files to perform the accessibility scans on.
+    """
+
+    if output_directory is None:
         script_dir = os.path.dirname(os.path.realpath(__file__))
-        output_dir = Path(script_dir, 'reports')
+        output_directory = Path(script_dir, 'reports')
 
     if file_name is None:
         files = build_file_list(directory_name)
@@ -96,10 +88,10 @@ def run(arguments: Dict[str, str]) -> None:
 
     errors = []
     for file in files:
-        errors.append(run_pa11y(file, output_dir, 'WCAG2A', 'axe'))
-        errors.append(run_pa11y(file, output_dir, 'WCAG2A', 'htmlcs'))
-        errors.append(run_pa11y(file, output_dir, 'WCAG2AA', 'axe'))
-        errors.append(run_pa11y(file, output_dir, 'WCAG2AA', 'htmlcs'))
+        errors.append(run_pa11y(file, output_directory, 'WCAG2A', 'axe'))
+        errors.append(run_pa11y(file, output_directory, 'WCAG2A', 'htmlcs'))
+        errors.append(run_pa11y(file, output_directory, 'WCAG2AA', 'axe'))
+        errors.append(run_pa11y(file, output_directory, 'WCAG2AA', 'htmlcs'))
 
     print_green('scans complete', flush=True)
 
@@ -118,9 +110,3 @@ def print_summary(errors: List[str]) -> None:
         if error is not None:
             print(error)
 
-
-if __name__ == '__main__':
-    try:
-        run(docopt(__doc__))
-    except SystemExit:
-        print(__doc__)
