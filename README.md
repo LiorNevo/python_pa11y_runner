@@ -70,6 +70,6 @@ These items are very high level.
 - [ ] Come up with a better name for the application
 - [X] create setup.py script
 - [ ] add more support for pa11y command parameters for running additional standards scans
-- [ ] convert to use [click](https://click.palletsprojects.com/en/7.x/) rather than [docopt](http://docopt.org/)
+- [X] convert to use [click](https://click.palletsprojects.com/en/7.x/) rather than [docopt](http://docopt.org/)
 - [ ] see if the runner can navigate sites directly and save the source files for scanning.  (May need Selenium or similar for IE support at which time this won't be cross platform anymore)
 - [ ] restructure project file structure
