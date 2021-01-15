@@ -1,0 +1,7 @@
+{
+	"chromeLaunchConfig": {
+		"args": ["--no-sandbox"]
+	},
+    "timeout": 10000,
+    "reporter": "csv"
+}
