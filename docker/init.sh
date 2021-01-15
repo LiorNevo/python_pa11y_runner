@@ -32,7 +32,7 @@ scan() {
     mkdir -p /opt/scanner/output
     while IFS="" read -r p || [ -n "$p" ]; do 
         if [ ! -z "$p" ]; then
-            timestamp=$(date +%T)
+            timestamp=$(date -u +%m_%d_%Y)
             url=$(echo $p | awk '{print $1}')
             name=$(echo $p | awk '{print $2}')
             printColor "Scanning $url, saving to ${name}_${timestamp}.csv" $COLOR_GREEN
