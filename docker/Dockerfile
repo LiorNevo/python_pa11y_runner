@@ -49,6 +49,7 @@ RUN npm install -g pa11y-ci \
 
 USER root
 ADD init.sh /opt/init.sh
-RUN chmod +x /opt/init.sh
+RUN chmod +x /opt/init.sh \
+	&& mkdir -p /opt/scanner
 
 ENTRYPOINT [ "/opt/init.sh" ]
