@@ -26,6 +26,12 @@ trapHandler() {
 
 trap '[ $? -eq 0 ] && exit 0 || trapHandler ${LINENO} $?' EXIT
 
+execute_scan() {
+    printColor "Scanning $1, saving to $2" $COLOR_GREEN
+    pa11y "$1" > /opt/output/$2 || true
+    printColor "Done" $COLOR_PINK
+}
+
 scan_from_urls_file() {
     printColor "Scanning from url file ${URL_FILE}" $COLOR_YELLOW
     while IFS="" read -r p || [ -n "$p" ]; do 
@@ -33,27 +39,23 @@ scan_from_urls_file() {
             timestamp=$(date -u +%m_%d_%Y)
             url=$(echo $p | awk '{print $1}')
             name=$(echo $p | awk '{print $2}')
-            printColor "Scanning $url, saving to ${name}_${timestamp}" $COLOR_GREEN
-            pa11y "$url" > /opt/output/${name}_${timestamp} || true
-            printColor "Done" $COLOR_PINK
+            execute_scan $url ${name}_${timestamp}
         fi
     done < "$URL_FILE"
 }
 
 scan_from_input_path() {
     printColor "Scanning from input path ${1}" $COLOR_YELLOW
-    for FILE in ${1}/*.{htm,html}; do
-        if [ -f "${FILE}" ]; then
+    for file in ${1}/*.{htm,html}; do
+        if [ -f "${file}" ]; then
             timestamp=$(date -u +%m_%d_%Y)
-            name=$(echo $FILE | sed -e "s/\//_/g" | sed -e "s/\./_/g")
-            printColor "Scanning file ${FILE}, saving to ${name}_${timestamp}" $COLOR_GREEN
-            pa11y "$FILE" > /opt/output/${name}_${timestamp} || true
-            printColor "Done" $COLOR_PINK
+            name=$(echo $file | sed -e "s/\//_/g" | sed -e "s/\./_/g")
+            execute_scan $file ${name}_${timestamp}
         fi
     done
-    for DIRECTORY in ${1}/*; do
-        if [ -d "${DIRECTORY}" ]; then
-            scan_from_input_path ${DIRECTORY}
+    for directory in ${1}/*; do
+        if [ -d "${directory}" ]; then
+            scan_from_input_path ${directory}
         fi
     done
 }
