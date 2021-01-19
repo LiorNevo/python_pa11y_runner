@@ -3,8 +3,7 @@
 docker run \
     --rm \
     -v ${PWD}/output:/opt/output \
-    -v ${PWD}:/opt/scanner \
-    -e URL_FILE=/opt/scanner/urls.txt \
-    -e INPUT_PATH=/opt/scanner/input \
+    -v ${PWD}/input:/opt/input \
+    -e URL_FILE=/opt/input/urls.txt \
     --name scanner \
     scanner

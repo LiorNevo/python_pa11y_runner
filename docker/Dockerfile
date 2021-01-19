@@ -4,6 +4,9 @@ ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=$PATH:/home/node/.npm-global/bin
 ENV NODE_ENV production
 ENV TERM xterm-color
+ENV PA11Y_VERSION 6.0.0-alpha
+ENV PA11Y_CLI_VERSION 2.4.0
+ENV PA11Y_HTML_REPORT_VERSION 2.0.0
 
 WORKDIR /opt
 
@@ -44,12 +47,17 @@ RUN apt-get update \
 		libnss3 
 
 USER node
-RUN npm install -g pa11y-ci \
-	&& npm install -g pa11y
+RUN yarn global add \
+	pa11y@${PA11Y_VERSION} \
+	pa11y-ci@${PA11Y_CLI_VERSION} \
+	pa11y-reporter-html@${PA11Y_HTML_REPORT_VERSION}
 
 USER root
 ADD init.sh /opt/init.sh
 RUN chmod +x /opt/init.sh \
-	&& mkdir -p /opt/scanner
+	&& mkdir -p /opt/scanner \
+	&& mkdir -p /opt/input \
+	&& mkdir -p /opt/output
+ADD pa11y.json /opt/scanner
 
 ENTRYPOINT [ "/opt/init.sh" ]
